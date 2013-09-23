@@ -37,13 +37,16 @@ module Dolt
 
       not_found { renderer.render("404") }
 
+      def self.ref_path_pattern(action)
+        %r{/#{action}/([^:]+)(?::|%3(?:a|A))(.*)}
+      end
+
       get "/" do
         redirect("/tree/HEAD:")
       end
 
-      get "/tree/*:*" do
+      get ref_path_pattern('tree') do |ref, path| # "/tree/*:*
         begin
-          ref, path = params[:splat]
           dolt.tree(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -54,9 +57,8 @@ module Dolt
         dolt.force_ref(params[:splat], "tree", "HEAD")
       end
 
-      get "/blob/*:*" do
+      get ref_path_pattern('blob') do |ref, path| # "/blob/*:*
         begin
-          ref, path = params[:splat]
           dolt.blob(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -67,9 +69,8 @@ module Dolt
         dolt.force_ref(params[:splat], "blob", "HEAD")
       end
 
-      get "/raw/*:*" do
+      get ref_path_pattern('raw') do |ref, path| # "/raw/*:*
         begin
-          ref, path = params[:splat]
           dolt.raw(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -80,9 +81,8 @@ module Dolt
         dolt.force_ref(params[:splat], "raw", "HEAD")
       end
 
-      get "/blame/*:*" do
+      get ref_path_pattern('blame') do |ref, path| # "/blame/*:*
         begin
-          ref, path = params[:splat]
           dolt.blame(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -93,9 +93,8 @@ module Dolt
         dolt.force_ref(params[:splat], "blame", "HEAD")
       end
 
-      get "/history/*:*" do
+      get ref_path_pattern('history') do |ref, path| # "/history/*:*
         begin
-          ref, path = params[:splat]
           dolt.history(repo, ref, path, (params[:commit_count] || 20).to_i)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -114,9 +113,8 @@ module Dolt
         end
       end
 
-      get "/tree_history/*:*" do
+      get ref_path_pattern('tree_history') do |ref, path| # "/tree_history/*:*
         begin
-          ref, path = params[:splat]
           dolt.tree_history(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)

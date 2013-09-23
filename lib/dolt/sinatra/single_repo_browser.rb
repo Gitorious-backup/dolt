@@ -1,6 +1,6 @@
 # encoding: utf-8
 #--
-#   Copyright (C) 2012 Gitorious AS
+#   Copyright (C) 2012-2013 Gitorious AS
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -15,30 +15,21 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
-require "sinatra/base"
-require "dolt/sinatra/actions"
+require "dolt/sinatra/repo_browser"
 require "libdolt/view/single_repository"
-require "libdolt/view/blob"
-require "libdolt/view/tree"
 
 module Dolt
   module Sinatra
-    class SingleRepoBrowser < ::Sinatra::Base
+    class SingleRepoBrowser < RepoBrowser
       include Dolt::View::SingleRepository
-      include Dolt::View::Blob
-      include Dolt::View::Tree
-
-      def initialize(repo, lookup, renderer)
-        @repo = repo
-        @lookup = lookup
-        @renderer = renderer
-        super()
-      end
-
-      not_found { renderer.render("404") }
 
       def self.ref_path_pattern(action)
         %r{/#{action}/([^:]+)(?::|%3(?:a|A))(.*)}
+      end
+
+      def initialize(repo, lookup, renderer)
+        @repo = repo
+        super(lookup, renderer)
       end
 
       get "/" do
@@ -122,11 +113,8 @@ module Dolt
       end
 
       private
-      attr_reader :repo, :lookup, :renderer
 
-      def dolt
-        @dolt ||= Dolt::Sinatra::Actions.new(self, lookup, renderer)
-      end
+      attr_reader :repo
 
       def force_ref(args, action, ref)
         redirect("/#{action}/#{ref}:" + args.join)

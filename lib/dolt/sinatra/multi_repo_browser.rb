@@ -23,6 +23,10 @@ module Dolt
     class MultiRepoBrowser < RepoBrowser
       include Dolt::View::MultiRepository
 
+      def self.repo_ref_path_pattern(action)
+        %r{/([^/]+)/#{action}/([^:]+)(?::|%3(?:a|A))(.*)}
+      end
+
       get "/" do
         response["Content-Type"] = "text/html"
         body(renderer.render(:index, { :repositories => lookup.repositories }))
@@ -32,9 +36,8 @@ module Dolt
         redirect "/#{params[:repo]}/tree/HEAD:"
       end
 
-      get "/*/tree/*:*" do
+      get repo_ref_path_pattern('tree') do |repo, ref, path| # "/*/tree/*:*
         begin
-          repo, ref, path = params[:splat]
           dolt.tree(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -45,9 +48,8 @@ module Dolt
         dolt.force_ref(params[:splat], "tree", "HEAD")
       end
 
-      get "/*/blob/*:*" do
+      get repo_ref_path_pattern('blob') do |repo, ref, path| # "/*/blob/*:*
         begin
-          repo, ref, path = params[:splat]
           dolt.blob(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -58,9 +60,8 @@ module Dolt
         dolt.force_ref(params[:splat], "blob", "HEAD")
       end
 
-      get "/*/raw/*:*" do
+      get repo_ref_path_pattern('raw') do |repo, ref, path| # "/*/raw/*:*
         begin
-          repo, ref, path = params[:splat]
           dolt.raw(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -71,9 +72,8 @@ module Dolt
         dolt.force_ref(params[:splat], "raw", "HEAD")
       end
 
-      get "/*/blame/*:*" do
+      get repo_ref_path_pattern('blame') do |repo, ref, path| # "/*/blame/*:*
         begin
-          repo, ref, path = params[:splat]
           dolt.blame(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -84,9 +84,8 @@ module Dolt
         dolt.force_ref(params[:splat], "blame", "HEAD")
       end
 
-      get "/*/history/*:*" do
+      get repo_ref_path_pattern('history') do |repo, ref, path| # "/*/history/*:*
         begin
-          repo, ref, path = params[:splat]
           dolt.history(repo, ref, path, (params[:commit_count] || 20).to_i)
         rescue Exception => err
           dolt.render_error(err, repo, ref)
@@ -105,9 +104,8 @@ module Dolt
         end
       end
 
-      get "/*/tree_history/*:*" do
+      get repo_ref_path_pattern('tree_history') do |repo, ref, path| # "/*/tree_history/*:*
         begin
-          repo, ref, path = params[:splat]
           dolt.tree_history(repo, ref, path)
         rescue Exception => err
           dolt.render_error(err, repo, ref)

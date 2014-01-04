@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://gitorious.org/gitorious/dolt"
   s.summary     = %q{Dolt serves git trees and syntax highlighted blobs}
   s.description = %q{Dolt serves git trees and syntax highlighted blobs}
+  s.license     = "AGPLv3+"
 
   s.rubyforge_project = "dolt"
 

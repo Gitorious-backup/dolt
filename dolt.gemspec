@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.version     = "0.30.0"
   s.authors     = ["Christian Johansen"]
   s.email       = ["christian@gitorious.org"]
-  s.homepage    = "http://gitorious.org/gitorious/dolt"
+  s.homepage    = "https://gitorious.org/gitorious/dolt"
   s.summary     = %q{Dolt serves git trees and syntax highlighted blobs}
   s.description = %q{Dolt serves git trees and syntax highlighted blobs}
 

@@ -4,6 +4,7 @@ gemspec
 
 gem "ci_reporter"
 gem "simplecov"
+gem "simplecov-rcov"
 
 # Support these markup formats in development
 gem "redcarpet"

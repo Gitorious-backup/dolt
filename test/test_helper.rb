@@ -16,6 +16,8 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 require "simplecov"
+require "simplecov-rcov"
+SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 SimpleCov.start
 
 require "bundler/setup"

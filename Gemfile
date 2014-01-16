@@ -3,8 +3,7 @@ source "http://rubygems.org"
 gemspec
 
 gem "ci_reporter"
-gem "rcov", :platforms => :ruby_18
-gem "simplecov", :platforms => [:ruby_19, :ruby_20]
+gem "simplecov"
 
 # Support these markup formats in development
 gem "redcarpet"
